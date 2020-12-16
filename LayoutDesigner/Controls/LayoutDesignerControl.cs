@@ -1,5 +1,7 @@
-﻿using System;
+﻿using LayoutDesigner.Utils;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +12,7 @@ namespace LayoutDesigner.Controls
 {
     public class LayoutDesignerControl:Control
     {
+        Debouncer eventDebouncer = new Debouncer();
         public LayoutDesignerControl()
         {
             DefaultStyleKey = typeof(LayoutDesignerControl);
@@ -30,7 +33,12 @@ namespace LayoutDesigner.Controls
         private static void ShowAvailableItemsPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = d as LayoutDesignerControl;
-            VisualStateManager.GoToState(control, (e.NewValue as bool?)==true?"ListOpen": "ListClosed", true);
+            control.eventDebouncer.Debounce(50, () => {
+                control.Dispatcher.Invoke(() => { 
+                    VisualStateManager.GoToState(control, (e.NewValue as bool?)==true?"ListOpen": "ListClosed", true);
+                });
+            });
+            
         }
     }
 }

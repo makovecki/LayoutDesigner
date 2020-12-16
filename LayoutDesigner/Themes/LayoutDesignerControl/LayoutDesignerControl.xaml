@@ -55,8 +55,9 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
+                        <Border BorderBrush="Red" BorderThickness="1"/>
                         <Border x:Name="Icon" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top"
-                                    BorderThickness="1" CornerRadius="2" Padding="2">
+                                    BorderThickness="1" CornerRadius="2" Padding="2" IsHitTestVisible="True" Margin="3">
                             <Border.BorderBrush>
                                 <SolidColorBrush  Color="Black" Opacity="0.5" />
                             </Border.BorderBrush>
@@ -75,10 +76,10 @@
                             </StackPanel>
                         </Border>
 
-                        <Border  x:Name="List" HorizontalAlignment="Left" CornerRadius="3" BorderThickness="1" Opacity="0" IsHitTestVisible="False"
-                                     BorderBrush="Gray" MinWidth="200">
+                        <Border Margin="3" x:Name="List" HorizontalAlignment="Left" CornerRadius="3" BorderThickness="1" Opacity="0" IsHitTestVisible="False"
+                                     BorderBrush="Gray" MinWidth="150">
                             <Border.Background>
-                                <SolidColorBrush Color="Gray" Opacity="0.5"/>
+                                <SolidColorBrush Color="Gray" Opacity="0.2"/>
                             </Border.Background>
                             <Border.RenderTransform>
                                 <TranslateTransform X="{Binding ElementName=List, Path=ActualWidth, Converter={StaticResource MultiplyConverter}, ConverterParameter=-1}" />
