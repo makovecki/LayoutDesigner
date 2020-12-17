@@ -8,6 +8,7 @@
                 <ControlTemplate TargetType="controls:LayoutDesignerControl">
                     <ControlTemplate.Resources>
                         <converters:MultiplyConverter x:Key="MultiplyConverter"/>
+                        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
                     </ControlTemplate.Resources>
                     <Grid>
                         <VisualStateManager.VisualStateGroups>
@@ -55,9 +56,9 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                        <Border BorderBrush="Red" BorderThickness="1"/>
+                        <Border BorderBrush="Red" BorderThickness="1" Visibility="{TemplateBinding IsInEditMode,Converter={StaticResource BoolToVisibilityConverter}}"/>
                         <Border x:Name="Icon" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top"
-                                    BorderThickness="1" CornerRadius="2" Padding="2" IsHitTestVisible="True" Margin="3">
+                                    BorderThickness="1" CornerRadius="2" Padding="2" IsHitTestVisible="True" Margin="3" Visibility="{TemplateBinding IsInEditMode,Converter={StaticResource BoolToVisibilityConverter}}">
                             <Border.BorderBrush>
                                 <SolidColorBrush  Color="Black" Opacity="0.5" />
                             </Border.BorderBrush>
@@ -84,7 +85,25 @@
                             <Border.RenderTransform>
                                 <TranslateTransform X="{Binding ElementName=List, Path=ActualWidth, Converter={StaticResource MultiplyConverter}, ConverterParameter=-1}" />
                             </Border.RenderTransform>
+                            <StackPanel VerticalAlignment="Top" Orientation="Vertical" Visibility="{TemplateBinding ShowAvailableItems, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <Border CornerRadius="2,2,0,0" >
+                                    <Border.Background>
+                                        <SolidColorBrush Color="Gray" Opacity="0.5"/>
+                                    </Border.Background>
+                                    <TextBlock Text="Nov" Margin="5,1"  />
+                                </Border>
+                                <ItemsControl ItemsSource="{Binding NewItems, RelativeSource={RelativeSource Mode=TemplatedParent}}"  >
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderBrush="Gray" BorderThickness="1">
+                                                <TextBlock Text="{Binding Name}" Margin="5,2"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
                         </Border>
+                        
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger SourceName="Icon" Property="IsMouseOver" Value="True">

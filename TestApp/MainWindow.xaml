@@ -9,5 +9,5 @@
     <Window.Icon>
         <DrawingImage />
     </Window.Icon>
-    <ui:LayoutDesignerControl/>
+    <ui:LayoutDesignerControl IsInEditMode="True" />
 </Window>

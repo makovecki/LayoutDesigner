@@ -2,6 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/LayoutDesigner;component/Themes/LayoutDesignerControl/LayoutDesignerControl.xaml" />
+        
 
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
