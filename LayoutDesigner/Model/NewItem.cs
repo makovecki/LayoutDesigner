@@ -1,6 +1,8 @@
-﻿namespace LayoutDesigner.Model
+﻿using LayoutDesigner.DragingDroping;
+
+namespace LayoutDesigner.Model
 {
-    public class NewItem
+    public class NewItem:IDragSource
     {
         public string Name { get; set; }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LayoutDesigner.DragingDroping;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,14 +12,13 @@ namespace LayoutDesigner.Controls
     {
         private List<UIElement> visuals;
         private ContentPresenter contentPresenter;
-        public Point CenterOffset;
-        public AdornerContent(UIElement adornedElement, UIElement content) : base(adornedElement)
+   
+        public AdornerContent(UIElement adornedElement, IDragSource content, DataTemplate template) : base(adornedElement)
         {
             visuals = new List<UIElement>();
-            contentPresenter = new ContentPresenter { Content = content };
+            contentPresenter = new ContentPresenter { Content = content, ContentTemplate=template };
             visuals.Add(contentPresenter);
-
-            
+            this.IsHitTestVisible = false;
         }
 
         protected override Size MeasureOverride(Size constraint)
