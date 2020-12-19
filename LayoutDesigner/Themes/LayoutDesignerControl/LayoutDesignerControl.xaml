@@ -104,6 +104,18 @@
                                 </ItemsControl>
                             </StackPanel>
                         </Border>
+                        <ItemsControl BorderBrush="Yellow" BorderThickness="1" >
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <controls:GroupPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <Border BorderBrush="Red" BorderThickness="1" Width="100" Height="20"/>
+                            <Border BorderBrush="Blue" BorderThickness="1" Width="100" Height="20"/>
+                            <Border BorderBrush="Green" BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                            
+                            <Border BorderBrush="Green" BorderThickness="1" Width="100" Height="20"/>
+                        </ItemsControl>
                         
                     </Grid>
                     <ControlTemplate.Triggers>
