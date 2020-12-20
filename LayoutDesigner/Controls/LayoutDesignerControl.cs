@@ -52,15 +52,15 @@ namespace LayoutDesigner.Controls
         public static readonly DependencyProperty IsInEditModeProperty =
             DependencyProperty.Register("IsInEditMode", typeof(bool), typeof(LayoutDesignerControl), new PropertyMetadata(false));
 
-        
-        
 
-        
-        
-        
+
+
 
         
 
-        
+
+
+
+
     }
 }

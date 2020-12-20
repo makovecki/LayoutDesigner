@@ -22,17 +22,39 @@ namespace LayoutDesigner.Controls
 
         protected override Size MeasureOverride(Size availableSize)
         {
+            double childHeight = 0.0;
+            double childWidth = 0.0;
+            var size = new Size(0, 0);
             foreach (UIElement child in Children)
-                child.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            {
+                child.Measure(new Size(availableSize.Width, availableSize.Height));
+                if (Orientation == Orientation.Horizontal)
+                {
+                    childWidth += child.DesiredSize.Width;
+                    if (child.DesiredSize.Height > childHeight) childHeight = child.DesiredSize.Height;
+                }
+                if (Orientation == Orientation.Vertical)
+                {
+                    childHeight += child.DesiredSize.Height;
+                    if (child.DesiredSize.Width > childWidth) childWidth = child.DesiredSize.Width;
+                }
+                
+            }
 
-            return new Size(0, 0);
+            size.Width = childWidth;
+            size.Height = childHeight;
+            if (Children.Count == 0)
+            {
+                size.Width = 200;
+                size.Height = 200;
+            };
+            return size;
         }
 
         protected override Size ArrangeOverride(Size finalSize)
         {
             if (Orientation == Orientation.Horizontal)
             {
-                
                 double HorizontalRemainingSpace = finalSize.Width - Children.OfType<FrameworkElement>().Where(x =>  !double.IsNaN(x.Width)).Sum(x => x.DesiredSize.Width);
                 int numberOfHorizontalStrethed = Children.OfType<FrameworkElement>().Count(f => f.HorizontalAlignment == HorizontalAlignment.Stretch && double.IsNaN(f.Width));
                 double spacePerControlForHorizontalStretch = HorizontalRemainingSpace / numberOfHorizontalStrethed;
@@ -62,16 +84,7 @@ namespace LayoutDesigner.Controls
                 }
             }
 
-            //double remainingSpace = Math.Max(0.0, finalSize.Height - Children.Cast<UIElement>().Sum(c => c.DesiredSize.Height));
-            //var extraSpace = remainingSpace / Children.Count;
-            //double offset = 0.0;
-
-            //foreach (UIElement child in Children)
-            //{
-            //    double height = child.DesiredSize.Height + extraSpace;
-            //    child.Arrange(new Rect(0, offset, finalSize.Width, height));
-            //    offset += height;
-            //}
+            
 
             return finalSize;
         }

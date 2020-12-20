@@ -1,4 +1,5 @@
-﻿using LayoutDesigner.Utils;
+﻿using LayoutDesigner.Model;
+using LayoutDesigner.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,7 +62,7 @@ namespace LayoutDesigner.DragingDroping
                 var adLayer = AdornerLayer.GetAdornerLayer(v);                
                 adLayer.Add(DragSource.Adorner);
 
-                DataObject dragData = new DataObject(DragSource.Source.GetType().Name, DragSource.Source);
+                DataObject dragData = new DataObject("Item", DragSource.Source);
                 DragDrop.DoDragDrop(sender as DependencyObject, dragData, DragDropEffects.Copy); //When doDragDrop OnMouseMoveNotFired !!
 
                 adLayer.Remove(DragSource.Adorner);
@@ -77,6 +78,67 @@ namespace LayoutDesigner.DragingDroping
         {
             DragSource = DragSourceFinder.GetDragSource(e.OriginalSource,XAMLHelper.GetDataTemplate((DependencyObject)e.OriginalSource));
             if (DragSource != null) e.Handled = true;
+        }
+
+
+
+        public static bool GetIsDragTarget(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(IsDragTargetProperty);
+        }
+
+        public static void SetIsDragTarget(DependencyObject obj, bool value)
+        {
+            obj.SetValue(IsDragTargetProperty, value);
+        }
+
+        // Using a DependencyProperty as the backing store for IsDragTarget.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsDragTargetProperty =
+            DependencyProperty.RegisterAttached("IsDragTarget", typeof(bool), typeof(DragingDroping), new PropertyMetadata(false, IsDragTargetPropertyChanged));
+
+        private static void IsDragTargetPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            UIElement element = (UIElement)d;
+            if ((bool)e.NewValue)
+            {
+                element.AllowDrop = true;
+                element.Drop += TargetDrop;
+                element.DragEnter += TargetDragEnter;
+                element.DragLeave += TargetDragLeave;
+                element.DragOver += TargetDragOver;
+                
+            }
+            else
+            {
+                element.Drop -= TargetDrop;
+                element.DragEnter -= TargetDragEnter;
+                element.DragLeave -= TargetDragLeave;
+                element.DragOver -= TargetDragOver;
+            }
+        }
+
+        
+
+        private static void TargetDragOver(object sender, DragEventArgs e)
+        {
+            if (sender is IDragTarget target && sender is FrameworkElement element) target.ShowNearestInsertionPlace(e.GetPosition(sender as IInputElement), new Rect(0,0,element.ActualWidth,element.ActualHeight));
+        }
+
+        private static void TargetDragLeave(object sender, DragEventArgs e)
+        {
+            if (sender is IDragTarget target) target.HideInsertionPlacers();
+            
+        }
+
+        private static void TargetDragEnter(object sender, DragEventArgs e)
+        {
+            
+            
+        }
+
+        private static void TargetDrop(object sender, DragEventArgs e)
+        {
+            if (sender is IDragTarget target) target.Drop(e.Data.GetData("Item") as IItem);
         }
     }
 }
